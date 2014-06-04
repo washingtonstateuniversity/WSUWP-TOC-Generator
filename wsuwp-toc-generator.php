@@ -19,7 +19,21 @@ class WSUWP_TOC_Generator {
 	 * Setup hooks.
 	 */
 	public function __construct() {
+		add_filter( 'wsuwp_generate_toc', array( $this, 'generate_toc' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+	}
+
+	/**
+	 * Determine whether TOC generation should occur on this page view.
+	 *
+	 * @return bool True if yes. False if no.
+	 */
+	public function generate_toc() {
+		if ( is_page() ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
