@@ -26,10 +26,12 @@ class WSUWP_TOC_Generator {
 	 * Enqueue the scripts used by the plugin.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_style( 'wsuwp-toc-generator-css', plugins_url( 'css/wsuwp-toc-generator.css', __FILE__ ), array(), $this->plugin_version );
+		if ( apply_filters( 'wsuwp_generate_toc', false ) ) {
+			wp_enqueue_style( 'wsuwp-toc-generator-css', plugins_url( 'css/wsuwp-toc-generator.css', __FILE__ ), array(), $this->plugin_version );
 
-		wp_enqueue_script( 'toc-jquery', plugins_url( 'js/toc.min.js', __FILE__ ), array( 'jquery' ), $this->plugin_version, true );
-		wp_enqueue_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
+			wp_enqueue_script( 'toc-jquery', plugins_url( 'js/toc.min.js', __FILE__ ), array( 'jquery' ), $this->plugin_version, true );
+			wp_enqueue_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
+		}
 	}
 }
 new WSUWP_TOC_Generator();
