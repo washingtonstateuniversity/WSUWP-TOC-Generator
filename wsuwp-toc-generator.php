@@ -19,33 +19,17 @@ class WSUWP_TOC_Generator {
 	 * Setup hooks.
 	 */
 	public function __construct() {
-		add_filter( 'wsuwp_generate_toc', array( $this, 'generate_toc' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_shortcode( 'wsuwp_toc', array( $this, 'display_toc' ) );
 	}
 
 	/**
-	 * Determine whether TOC generation should occur on this page view.
-	 *
-	 * @return bool True if yes. False if no.
+	 * Enqueue the scripts used to display the table of contents.
 	 */
-	public function generate_toc() {
-		if ( is_page() ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Enqueue the scripts used by the plugin.
-	 */
-	public function enqueue_scripts() {
-		if ( apply_filters( 'wsuwp_generate_toc', false ) ) {
+	public function display_toc() {
 			wp_enqueue_style( 'wsuwp-toc-generator-css', plugins_url( 'css/wsuwp-toc-generator.css', __FILE__ ), array(), $this->plugin_version );
 
 			wp_enqueue_script( 'toc-jquery', plugins_url( 'js/toc.min.js', __FILE__ ), array( 'jquery' ), $this->plugin_version, true );
 			wp_enqueue_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
-		}
 	}
 }
 new WSUWP_TOC_Generator();
