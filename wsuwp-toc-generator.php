@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WSUWP Table of Contents Generator
-Version: 0.3.0
+Version: 0.4.0
 Plugin URI: http://web.wsu.edu
 Description: A shortcode to generate a DOM element containing the table of contents for a long page.
 Author: washingtonstateuniversity, jeremyfelt
@@ -13,7 +13,7 @@ class WSUWP_TOC_Generator {
 	/**
 	 * @var string Current version of this plugin.
 	 */
-	var $plugin_version = '0.3.0';
+	var $plugin_version = '0.4.0';
 
 	/**
 	 * Setup hooks.
