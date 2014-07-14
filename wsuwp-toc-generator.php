@@ -26,14 +26,24 @@ class WSUWP_TOC_Generator {
 	 * Enqueue the scripts used to display the table of contents.
 	 */
 	public function display_toc( $attributes ) {
-		$attributes = shortcode_atts( array( 'position' => 'content' ), $attributes );
+		$defaults = array(
+			'position' => 'content',
+			'headers' => 'h1,h2,h3,h4',
+		);
+		$attributes = shortcode_atts( $defaults, $attributes );
 
 		if ( ! in_array( $attributes['position'], array( 'content', 'bottom' ) ) ) {
 			$attributes['position'] = 'content';
 		}
 
+		$headers = explode( ',', $attributes['headers'] );
+		$headers = array_filter( $headers, array( $this, 'clean_headers' ) );
+		$headers = implode( ',', $headers );
+
 		wp_enqueue_script( 'toc-jquery', plugins_url( 'js/toc.min.js', __FILE__ ), array( 'jquery' ), $this->plugin_version, true );
-		wp_enqueue_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
+		wp_register_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
+		wp_localize_script( 'wsuwp-toc-generator', 'WSUWP_TOC', array( 'selectors' => $headers ) );
+		wp_enqueue_script( 'wsuwp-toc-generator' );
 
 		if ( 'content' === $attributes['position'] ) {
 			return '<div id="toc"></div>';
@@ -42,6 +52,23 @@ class WSUWP_TOC_Generator {
 		add_action( 'wp_footer', array( $this, 'footer_display_toc' ) );
 
 		return '';
+	}
+
+	/**
+	 * Filter the list of provided header sizes to remove any that are invalid.
+	 *
+	 * @param array $header Array of header sizes.
+	 *
+	 * @return bool True if valid. False if not.
+	 */
+	public function clean_headers( $header ) {
+		$header = trim( strtolower( $header ) );
+
+		if ( in_array( $header, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
