@@ -38,9 +38,12 @@ class WSUWP_TOC_Generator {
 
 		$headers = explode( ',', $attributes['headers'] );
 		$headers = array_filter( $headers, array( $this, 'clean_headers' ) );
+		$headers = implode( ',', $headers );
 
 		wp_enqueue_script( 'toc-jquery', plugins_url( 'js/toc.min.js', __FILE__ ), array( 'jquery' ), $this->plugin_version, true );
-		wp_enqueue_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
+		wp_register_script( 'wsuwp-toc-generator', plugins_url( 'js/wsuwp-toc-generator.js', __FILE__ ), array( 'toc-jquery', 'jquery' ), $this->plugin_version, true );
+		wp_localize_script( 'wsuwp-toc-generator', 'WSUWP_TOC', array( 'selectors' => $headers ) );
+		wp_enqueue_script( 'wsuwp-toc-generator' );
 
 		if ( 'content' === $attributes['position'] ) {
 			return '<div id="toc"></div>';
