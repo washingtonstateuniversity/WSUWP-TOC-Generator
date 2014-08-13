@@ -46,7 +46,7 @@ class WSUWP_TOC_Generator {
 		wp_enqueue_script( 'wsuwp-toc-generator' );
 
 		if ( 'content' === $attributes['position'] ) {
-			return '<div id="toc"></div>';
+			return '<div id="toc" class="toc toc-generated"></div>';
 		}
 
 		add_action( 'wp_footer', array( $this, 'footer_display_toc' ) );
@@ -75,7 +75,7 @@ class WSUWP_TOC_Generator {
 	 * Display the TOC element at the end of the page for custom positioning.
 	 */
 	public function footer_display_toc() {
-		echo '<div id="toc"></div>';
+		echo '<div id="toc" class="toc toc-generated"></div>';
 	}
 }
 new WSUWP_TOC_Generator();
